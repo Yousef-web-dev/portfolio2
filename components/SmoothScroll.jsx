@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import Lenis from "lenis";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { gsap, ScrollTrigger, RESPECT_REDUCED_MOTION } from "@/lib/gsap";
 // Smooth scrolling (wheel + nav links) kept in sync with GSAP ScrollTrigger.
 export default function SmoothScroll() {
   useEffect(() => {
@@ -13,7 +13,7 @@ export default function SmoothScroll() {
     const t = setTimeout(refresh, 800);
     const cleanup = () => { clearTimeout(t); window.removeEventListener("load", refresh); };
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return cleanup;
+    if (RESPECT_REDUCED_MOTION && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return cleanup;
     const lenis = new Lenis({ duration: 1.2, easing: (x) => Math.min(1, 1.001 - Math.pow(2, -10 * x)) });
     lenis.on("scroll", ScrollTrigger.update);
     const tick = (time) => lenis.raf(time * 1000);

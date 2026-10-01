@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
+import { gsap, useGSAP, MOTION_OK, RESPECT_REDUCED_MOTION } from "@/lib/gsap";
 const PHRASES = ["I craft fast, responsive interfaces.", "I turn ideas into motion.", "I write clean React code.", "I design for every screen."];
 const TAGS = ["React", "Next.js", "Tailwind CSS", "GSAP", "Framer Motion", "REST APIs"];
 const L = ({ children, className = "" }) => <span className={`mask ${className}`}><span className="hl block">{children}</span></span>;
 export default function Hero() {
-  const root = useRef(null); const [i, setI] = useState(0); const reduce = useReducedMotion();
+  const root = useRef(null); const [i, setI] = useState(0); const sys = useReducedMotion(); const reduce = RESPECT_REDUCED_MOTION && sys;
   useEffect(() => { const t = setInterval(() => setI(n => (n + 1) % PHRASES.length), 3000); return () => clearInterval(t); }, []);
   useGSAP(() => {
     gsap.matchMedia().add(MOTION_OK, () => {
@@ -14,7 +14,6 @@ export default function Hero() {
         .from(".hl", { yPercent: 110, duration: 1.4, stagger: .15, delay: .3 })
         .fromTo(".hero-img", { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(72% at 50% 50%)", duration: 1.6 }, "-=1.1")
         .from(".meta", { opacity: 0, y: 12, duration: .8, stagger: .1 }, "-=.9");
-      gsap.to(".mq", { xPercent: -50, duration: 40, ease: "none", repeat: -1 });
       const els = gsap.utils.toArray("[data-depth]").map(el => [gsap.quickTo(el, "x", { duration: .8 }), gsap.quickTo(el, "y", { duration: .8 }), +el.dataset.depth]);
       const mv = e => { const nx = e.clientX / innerWidth - .5, ny = e.clientY / innerHeight - .5; els.forEach(([x, y, d]) => { x(nx * d); y(ny * d); }); };
       window.addEventListener("mousemove", mv); return () => window.removeEventListener("mousemove", mv);
@@ -42,7 +41,7 @@ export default function Hero() {
           <div className="mt-4 h-px bg-[var(--mute)]/30"><motion.span key={i} initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 3, ease: "linear" }} className="block h-px origin-left bg-[var(--accent)]" /></div>
         </div>
         <div aria-hidden className="meta overflow-hidden border-t border-[var(--mute)]/30 py-4">
-          <div className="mq flex w-max gap-12 whitespace-nowrap text-xl text-[var(--mute)] md:text-3xl">
+          <div className="marquee flex w-max gap-12 whitespace-nowrap text-xl text-[var(--mute)] md:text-3xl">
             {Array(4).fill(TAGS).flat().map((t, k) => <span key={k} className="flex items-center gap-12">{t}<i className="h-2 w-2 rounded-full bg-[var(--accent)]" /></span>)}
           </div>
         </div>

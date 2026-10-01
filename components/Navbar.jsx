@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { FiMenu, FiX } from "react-icons/fi";
 import useActiveSection from "@/hooks/useActiveSection";
+import { RESPECT_REDUCED_MOTION } from "@/lib/gsap";
 const IDS = ["home", "about", "skills", "projects", "certificates", "contact"];
 export default function Navbar() {
   const active = useActiveSection(IDS);
   const [open, setOpen] = useState(false);
-  const reduce = useReducedMotion();
+  const sys = useReducedMotion(); const reduce = RESPECT_REDUCED_MOTION && sys;
   const d = reduce ? 0 : 1;
 
   // Menu open: lock scroll, close on Escape.
