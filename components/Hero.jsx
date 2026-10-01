@@ -6,7 +6,9 @@ const PHRASES = ["I craft fast, responsive interfaces.", "I turn ideas into moti
 const TAGS = ["React", "Next.js", "Tailwind CSS", "GSAP", "Framer Motion", "REST APIs"];
 const L = ({ children, className = "" }) => <span className={`mask ${className}`}><span className="hl block">{children}</span></span>;
 export default function Hero() {
-  const root = useRef(null); const [i, setI] = useState(0); const sys = useReducedMotion(); const reduce = RESPECT_REDUCED_MOTION && sys;
+  const root = useRef(null); const imgRef = useRef(null); const [i, setI] = useState(0); const sys = useReducedMotion(); const reduce = RESPECT_REDUCED_MOTION && sys;
+  // If the portrait failed to load before React attached onError, hide the broken image box.
+  useEffect(() => { const im = imgRef.current; if (im && im.complete && im.naturalWidth === 0) im.parentElement.style.display = "none"; }, []);
   useEffect(() => { const t = setInterval(() => setI(n => (n + 1) % PHRASES.length), 3000); return () => clearInterval(t); }, []);
   useGSAP(() => {
     gsap.matchMedia().add(MOTION_OK, () => {
@@ -28,7 +30,7 @@ export default function Hero() {
           <L className="text-[17vw] md:text-[15vw] text-transparent [-webkit-text-stroke:1.5px_var(--ink)] md:ml-[10vw]">Mohamed</L>
         </h1>
         <div className="hero-img ml-auto mt-8 h-[42vw] w-[42vw] overflow-hidden rounded-full md:absolute md:right-[10vw] md:top-[-4vh] md:mt-0 md:h-[34vw] md:max-h-[60vh] md:w-[34vw] md:max-w-[60vh]" data-depth="26">
-          <img src="/me.jpg" alt="Portrait of Yousef Mohamed" className="h-full w-full object-cover" onError={(e) => { e.currentTarget.parentElement.style.display = "none"; }} />
+          <img ref={imgRef} src="/me.jpg" alt="Portrait of Yousef Mohamed" className="h-full w-full object-cover" onError={(e) => { e.currentTarget.parentElement.style.display = "none"; }} />
         </div>
       </div>
       <div className="mt-auto md:mt-0">
