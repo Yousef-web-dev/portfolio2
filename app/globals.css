@@ -4,3 +4,6 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-main),sans-ser
 .mask{display:block;overflow:hidden;padding-bottom:.08em}
 :focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 @media (hover:hover) and (pointer:fine){body,a,button,input,textarea{cursor:none}}
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
