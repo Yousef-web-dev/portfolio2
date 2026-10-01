@@ -20,18 +20,18 @@ export default function Hero() {
     });
   }, { scope: root });
   return (
-    <section id="home" ref={root} className="relative flex min-h-screen flex-col justify-between overflow-hidden pt-28">
+    <section id="home" ref={root} className="relative flex min-h-[100svh] flex-col gap-10 overflow-hidden pt-24 md:justify-between md:gap-0 md:pt-28">
       <div className="meta flex justify-between px-5 text-sm text-[var(--mute)] md:px-10"><span>Frontend Developer</span><span>Portfolio 2026</span></div>
       <div className="relative px-5 md:px-10">
         <h1 className="font-semibold uppercase leading-[.85] tracking-tighter whitespace-nowrap" data-depth="-16">
-          <L className="text-[19vw]">Yousef</L>
-          <L className="text-[15vw] text-transparent [-webkit-text-stroke:1.5px_var(--ink)] md:ml-[10vw]">Mohamed</L>
+          <L className="text-[23vw] md:text-[19vw]">Yousef</L>
+          <L className="text-[17vw] md:text-[15vw] text-transparent [-webkit-text-stroke:1.5px_var(--ink)] md:ml-[10vw]">Mohamed</L>
         </h1>
-        <div className="hero-img mt-8 h-44 w-44 overflow-hidden rounded-full md:absolute md:right-[10vw] md:top-[-4vh] md:mt-0 md:h-[34vw] md:max-h-[60vh] md:w-[34vw] md:max-w-[60vh]" data-depth="26">
-          <img src="/me.jpg" alt="Portrait of Yousef Mohamed" className="h-full w-full object-cover" />
+        <div className="hero-img ml-auto mt-8 h-[42vw] w-[42vw] overflow-hidden rounded-full md:absolute md:right-[10vw] md:top-[-4vh] md:mt-0 md:h-[34vw] md:max-h-[60vh] md:w-[34vw] md:max-w-[60vh]" data-depth="26">
+          <img src="/me.jpg" alt="Portrait of Yousef Mohamed" className="h-full w-full object-cover" onError={(e) => { e.currentTarget.parentElement.style.display = "none"; }} />
         </div>
       </div>
-      <div>
+      <div className="mt-auto md:mt-0">
         <div className="meta px-5 pb-8 md:px-10">
           <div className="h-[2.4em] overflow-hidden md:h-[1.2em] text-[clamp(1.5rem,4.2vw,4.5rem)] font-light leading-[1.2]" aria-live="off">
             <AnimatePresence mode="wait">
