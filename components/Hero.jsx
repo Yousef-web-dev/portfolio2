@@ -1,0 +1,52 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
+const PHRASES = ["I craft fast, responsive interfaces.", "I turn ideas into motion.", "I write clean React code.", "I design for every screen."];
+const TAGS = ["React", "Next.js", "Tailwind CSS", "GSAP", "Framer Motion", "REST APIs"];
+const L = ({ children, className = "" }) => <span className={`mask ${className}`}><span className="hl block">{children}</span></span>;
+export default function Hero() {
+  const root = useRef(null); const [i, setI] = useState(0);
+  useEffect(() => { const t = setInterval(() => setI(n => (n + 1) % PHRASES.length), 3000); return () => clearInterval(t); }, []);
+  useGSAP(() => {
+    gsap.matchMedia().add(MOTION_OK, () => {
+      gsap.timeline({ defaults: { ease: "expo.out" } })
+        .from(".hl", { yPercent: 110, duration: 1.4, stagger: .15, delay: .3 })
+        .fromTo(".hero-img", { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(72% at 50% 50%)", duration: 1.6 }, "-=1.1")
+        .from(".meta", { opacity: 0, y: 12, duration: .8, stagger: .1 }, "-=.9");
+      gsap.to(".mq", { xPercent: -50, duration: 40, ease: "none", repeat: -1 });
+      const els = gsap.utils.toArray("[data-depth]").map(el => [gsap.quickTo(el, "x", { duration: .8 }), gsap.quickTo(el, "y", { duration: .8 }), +el.dataset.depth]);
+      const mv = e => { const nx = e.clientX / innerWidth - .5, ny = e.clientY / innerHeight - .5; els.forEach(([x, y, d]) => { x(nx * d); y(ny * d); }); };
+      window.addEventListener("mousemove", mv); return () => window.removeEventListener("mousemove", mv);
+    });
+  }, { scope: root });
+  return (
+    <section id="home" ref={root} className="relative flex min-h-screen flex-col justify-between overflow-hidden pt-28">
+      <div className="meta flex justify-between px-5 text-sm text-[var(--mute)] md:px-10"><span>Frontend Developer</span><span>Portfolio 2026</span></div>
+      <div className="relative px-5 md:px-10">
+        <h1 className="font-semibold uppercase leading-[.85] tracking-tighter whitespace-nowrap" data-depth="-16">
+          <L className="text-[19vw]">Yousef</L>
+          <L className="text-[15vw] text-transparent [-webkit-text-stroke:1.5px_var(--ink)] md:ml-[10vw]">Mohamed</L>
+        </h1>
+        <div className="hero-img mt-8 h-44 w-44 overflow-hidden rounded-full md:absolute md:right-[10vw] md:top-[-4vh] md:mt-0 md:h-[34vw] md:max-h-[60vh] md:w-[34vw] md:max-w-[60vh]" data-depth="26">
+          <img src="/me.jpg" alt="Portrait of Yousef Mohamed" className="h-full w-full object-cover" />
+        </div>
+      </div>
+      <div>
+        <div className="meta px-5 pb-8 md:px-10">
+          <div className="h-[1.2em] overflow-hidden text-[clamp(1.5rem,4.2vw,4.5rem)] font-light leading-[1.2]" aria-live="off">
+            <AnimatePresence mode="wait">
+              <motion.p key={i} initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "-100%" }} transition={{ duration: .6, ease: [.76, 0, .24, 1] }}>{PHRASES[i]}</motion.p>
+            </AnimatePresence>
+          </div>
+          <div className="mt-4 h-px bg-[var(--mute)]/30"><motion.span key={i} initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 3, ease: "linear" }} className="block h-px origin-left bg-[var(--accent)]" /></div>
+        </div>
+        <div aria-hidden className="meta overflow-hidden border-t border-[var(--mute)]/30 py-4">
+          <div className="mq flex w-max gap-12 whitespace-nowrap text-xl text-[var(--mute)] md:text-3xl">
+            {Array(4).fill(TAGS).flat().map((t, k) => <span key={k} className="flex items-center gap-12">{t}<i className="h-2 w-2 rounded-full bg-[var(--accent)]" /></span>)}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
