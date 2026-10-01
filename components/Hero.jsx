@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 const PHRASES = ["I craft fast, responsive interfaces.", "I turn ideas into motion.", "I write clean React code.", "I design for every screen."];
 const TAGS = ["React", "Next.js", "Tailwind CSS", "GSAP", "Framer Motion", "REST APIs"];
 const L = ({ children, className = "" }) => <span className={`mask ${className}`}><span className="hl block">{children}</span></span>;
 export default function Hero() {
-  const root = useRef(null); const [i, setI] = useState(0);
+  const root = useRef(null); const [i, setI] = useState(0); const reduce = useReducedMotion();
   useEffect(() => { const t = setInterval(() => setI(n => (n + 1) % PHRASES.length), 3000); return () => clearInterval(t); }, []);
   useGSAP(() => {
     gsap.matchMedia().add(MOTION_OK, () => {
@@ -34,9 +34,9 @@ export default function Hero() {
       </div>
       <div>
         <div className="meta px-5 pb-8 md:px-10">
-          <div className="h-[1.2em] overflow-hidden text-[clamp(1.5rem,4.2vw,4.5rem)] font-light leading-[1.2]" aria-live="off">
+          <div className="h-[2.4em] overflow-hidden md:h-[1.2em] text-[clamp(1.5rem,4.2vw,4.5rem)] font-light leading-[1.2]" aria-live="off">
             <AnimatePresence mode="wait">
-              <motion.p key={i} initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "-100%" }} transition={{ duration: .6, ease: [.76, 0, .24, 1] }}>{PHRASES[i]}</motion.p>
+              <motion.p key={i} initial={reduce ? { opacity: 0 } : { y: "100%" }} animate={reduce ? { opacity: 1 } : { y: 0 }} exit={reduce ? { opacity: 0 } : { y: "-100%" }} transition={{ duration: reduce ? .3 : .6, ease: [.76, 0, .24, 1] }}>{PHRASES[i]}</motion.p>
             </AnimatePresence>
           </div>
           <div className="mt-4 h-px bg-[var(--mute)]/30"><motion.span key={i} initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 3, ease: "linear" }} className="block h-px origin-left bg-[var(--accent)]" /></div>

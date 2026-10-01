@@ -2,16 +2,23 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-// Smooth, eased scrolling (wheel + nav links), kept in sync with GSAP ScrollTrigger.
+// Smooth scrolling (wheel + nav links) kept in sync with GSAP ScrollTrigger.
 export default function SmoothScroll() {
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    // Mobile: don't recalculate on address-bar resize; recalculate once fonts/images are ready.
+    ScrollTrigger.config({ ignoreMobileResize: true });
+    const refresh = () => ScrollTrigger.refresh();
+    window.addEventListener("load", refresh);
+    document.fonts?.ready.then(refresh);
+    const t = setTimeout(refresh, 800);
+    const cleanup = () => { clearTimeout(t); window.removeEventListener("load", refresh); };
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return cleanup;
+    const lenis = new Lenis({ duration: 1.2, easing: (x) => Math.min(1, 1.001 - Math.pow(2, -10 * x)) });
     lenis.on("scroll", ScrollTrigger.update);
-    const tick = (t) => lenis.raf(t * 1000);
+    const tick = (time) => lenis.raf(time * 1000);
     gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
-    // Nav links (#about, #projects...) glide to their section instead of jumping.
     const onClick = (e) => {
       const a = e.target.closest?.('a[href^="#"]');
       const el = a && document.getElementById(a.getAttribute("href").slice(1));
@@ -21,7 +28,7 @@ export default function SmoothScroll() {
       history.replaceState(null, "", a.getAttribute("href"));
     };
     document.addEventListener("click", onClick);
-    return () => { document.removeEventListener("click", onClick); gsap.ticker.remove(tick); lenis.destroy(); };
+    return () => { cleanup(); document.removeEventListener("click", onClick); gsap.ticker.remove(tick); lenis.destroy(); };
   }, []);
   return null;
 }
