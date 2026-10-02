@@ -3,12 +3,11 @@ import { motion } from "framer-motion";
 import { FaFacebookF, FaGithub, FaLinkedinIn, FaInstagram, FaWhatsapp, FaEnvelope } from "react-icons/fa";
 // PLACEHOLDER: replace each URL with your real profile link.
 const LINKS = [
-  { label: "Facebook", href: "https://facebook.com/YOUR_USERNAME", Icon: FaFacebookF },
-  { label: "GitHub", href: "https://github.com/YOUR_USERNAME", Icon: FaGithub },
-  { label: "LinkedIn", href: "https://linkedin.com/in/YOUR_USERNAME", Icon: FaLinkedinIn },
-  { label: "Instagram", href: "https://instagram.com/YOUR_USERNAME", Icon: FaInstagram },
-  { label: "WhatsApp", href: "https://wa.me/YOUR_PHONE_NUMBER", Icon: FaWhatsapp },
-  { label: "Email", href: "mailto:YOUR_EMAIL", Icon: FaEnvelope },
+  { label: "Facebook", href: "https://www.facebook.com/share/1A3evSjr5r/", Icon: FaFacebookF },
+  { label: "GitHub", href: "https://github.com/Yousef-web-dev", Icon: FaGithub },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/yousef-mohamed-b824a2341", Icon: FaLinkedinIn },
+  { label: "WhatsApp", href: "https://wa.me/01157700392", Icon: FaWhatsapp },
+  { label: "Email", href: "mailto:yousefmohamed.2942003@gmail.com", Icon: FaEnvelope },
 ];
 export default function SocialLinks() {
   return (
